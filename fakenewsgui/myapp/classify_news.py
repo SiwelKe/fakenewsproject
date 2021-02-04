@@ -1,5 +1,6 @@
 # coding: utf-8
 # -*- coding: utf-8 -*-
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 
 import pandas as pd
 import numpy as np
@@ -29,7 +30,7 @@ os.chdir(project_path)
 from django.core.wsgi import get_wsgi_application
 application=get_wsgi_application()
 from django.contrib.gis.views import feed
-from myapp.strainer import *
+from myapp.scrapper import *
 from myapp.util import *
 
 
@@ -79,7 +80,8 @@ def buildExampleRow(body_text, cDict):
         if(word in cDict.keys()):
             example_vector[cDict[word]-1] = 1
         else:
-            print("This word doesn't exist in the dict:" + word)
+            pass
+            #print("This word doesn't exist in the dict:" + word)
 
     return (example_vector)
 
@@ -102,12 +104,10 @@ def processExamples(qs_Examples, cDict):
         else:
             examplesMatrix = np.vstack([examplesMatrix, buildExampleRow(ex.body_text, cDict)])
         #print('.', end='', flush=True)
-        print("." )
+        #print("." )
+        pass
 
     return( (Y_vector, examplesMatrix))
-
-
-
 
 
 
@@ -119,65 +119,143 @@ print("Loading model...")
 log_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/log_model.sav', 'rb'))
 svc_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/svc_model.sav', 'rb'))
 mlp_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/MLPC_model.sav', 'rb'))
+mnb_model=  pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/multinomial_model.sav','rb'))
 gnb_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/gaussian_model.sav', 'rb'))
+bernoulli_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/bernoulli_model.sav', 'rb'))
 print("Model loaded successful.")
 
 
 # 2. Use SoupStrainer to get the URL and process the article-turn it into an example
 
-print("Initializing dictionaries...")
+print("Starting the  dictionaries of words")
 cDict = loadCanonDict()
-ss = SoupStrainer()
-ss.init()
+soup = SoupStrainer()
+soup.init()
 
 # 3. Get user input to get a URL
 #turn article into input for the model
 url = input("Enter a link to analyze: ")
 
-print("Analyzing URL: " + url)
-if(ss.loadAddress(url)):
-    articleX = buildExampleRow(ss.extractText, cDict)
+print("Analyzing your link: " + url)
+if(soup.loadAddress(url)):
+    siteArticle = buildExampleRow(soup.extractText, cDict)
 else:
-    print("This URL is invalid, exiting")
+    print("This is a wrong URL or You are offline")
     exit(0)
 
-articleX = articleX.reshape(1, -1)
+siteArticle = siteArticle.reshape(1, -1)
 
 # 5. Send the X row to the model to produce a prediction
 
-log_prediction = log_model.predict(articleX)
-log_probabilities = log_model.predict_proba(articleX)
+log_prediction = log_model.predict(siteArticle)
+log_probabilities = log_model.predict_proba(siteArticle)
 
-svc_prediction = svc_model.predict(articleX)
-svc_probabilities = svc_model.predict_proba(articleX)
+svc_prediction = svc_model.predict(siteArticle)
+svc_probabilities = svc_model.predict_proba(siteArticle)
 
-mlp_prediction = mlp_model.predict(articleX)
-mlp_probabilities = mlp_model.predict_proba(articleX)
+mlp_prediction = mlp_model.predict(siteArticle)
+mlp_probabilities = mlp_model.predict_proba(siteArticle)
 
-gnb_prediction = gnb_model.predict(articleX)
-gnb_probabilities = gnb_model.predict_proba(articleX)
+gnb_prediction = gnb_model.predict(siteArticle)
+gnb_probabilities = gnb_model.predict_proba(siteArticle)
+
+mnb_prediction = mnb_model.predict(siteArticle)
+mnb_probabilities = mnb_model.predict_proba(siteArticle)
+
+bernoulli_prediction = bernoulli_model.predict(siteArticle)
+bernoulli_probabilities = bernoulli_model.predict_proba(siteArticle)
 
 # 6. Display the processed text and the results
+
+
 print("*** SVC ")
 print("Prediction on this article is: ")
 print(svc_prediction)
 print("Probabilities:")
 print(svc_probabilities)
+print("\n")
+
 
 print("*** Logistic ")
 print("Prediction on this article is: ")
 print(log_prediction)
+
 print("Probabilities:")
 print(log_probabilities)
+print("\n")
+
 
 print("*** MLP ")
 print("Prediction on this article is: ")
 print(mlp_prediction)
 print("Probabilities:")
 print(mlp_probabilities)
+print("\n")
+
+
+
+print("*** MultinomialNB")
+print("Prediction on this article is: ")
+print(mnb_prediction)
+print("Probabilities:")
+print(mnb_probabilities)
+print("\n")
+
+
+
+print("*** BernoulliNB")
+print("Prediction on this article is: ")
+print(bernoulli_prediction)
+print("Probabilities:")
+print(bernoulli_probabilities)
+print("\n")
+
 
 print("*** GNB")
 print("Prediction on this article is: ")
 print(gnb_prediction)
+
 print("Probabilities:")
 print(gnb_probabilities)
+
+print("**********************************************")
+
+count=0
+countlog=0
+countsvc=0
+countbern=0
+countmlp=0
+countmnb=0
+countgnb=0
+
+if( log_prediction==[4] or log_prediction == [2]):
+    countlog+=1
+
+if( svc_prediction==[4] or svc_prediction == [2]):
+    countsvc+=1
+
+if( mlp_prediction==[4] or mlp_prediction == [2]):
+    countmlp+=1
+
+if( bernoulli_prediction==[4] or bernoulli_prediction == [2]):
+    countbern+=1
+
+
+if( mnb_prediction==[4] or mnb_prediction == [2]):
+    countmnb+=1
+
+if( gnb_prediction==[4] or gnb_prediction == [2]):
+    countgnb+=1
+
+
+counttot=countlog+countmlp+countsvc+countgnb+countmnb+countbern
+if (counttot >= 3):
+    print("THIS IS REAL NEWS ")
+    print("The count is:", counttot)
+else:
+    print("The count is:", counttot)
+    print("THIS IS FAKE NEWS")
+                  
+       
+print("**********************************************")
+        

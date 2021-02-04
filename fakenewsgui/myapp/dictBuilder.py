@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 #to see if something is already in the dictionary 
 # without having to do a database lookup
+
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 from django.apps import AppConfig
 import os,sys,re,time
 

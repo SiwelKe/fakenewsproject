@@ -1,24 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block extrahead %}
-	<title>Detection of fake news</title>
-	<meta property="og:title" content="Detection of fake news">
-	<meta property="twitter:title" content="Detection of fake news">
-	<meta property="og:image" content="https://www.unslanted.net/static/crowdnews/robobrain_md.png">
-	<meta property="twitter:image" content="https://www.unslanted.net/static/crowdnews/robobrain_md.png">
-
-	<meta property="og:description" content="New artificial intelligence can detect fake news with high accuracy. Give it a try!">
-	<meta property="twitter:description" content="New artificial intelligence can detect fake news with high accuracy. Give it a try!">
-	<meta name="description" content="Detection of fake news">
-	<meta name="keywords" content="artificial intelligence natural language processing news fake news detection">
-	<meta property="og:url" content="https://www.unslanted.net/newsbot/">
-	<meta property="twitter:url" content="https://www.unslanted.net/newsbot/">
-	<meta property="og:type" content="article">
-	<meta property="twitter:type" content="article">
-<link rel="canonical" href="https://www.unslanted.net/newsbot/" />
-<meta name="twitter:partner" content="unslanted.net">
-<meta name="twitter:card" content="summary">
-
+	
 
 <style>
 input[type=url] {
@@ -42,7 +25,7 @@ input[type=submit] {
 			<div class="wpb_wrapper">
 				<br/>
 
-<h2 style="text-align: center;"> DETECTING FAKE NEWS USING AI</h2>
+<h2 style="text-align: center;"> DETECTING FAKE NEWS USING NAIVE BAYES CLASSIFIERS</h2>
 
 <br/>
 
@@ -51,7 +34,7 @@ input[type=submit] {
  <div class="buttonHolder">
 	  <div id="div_id_entryURL" class="form-group">
 		   <label for="id_entryURL" class="col-form-label  requiredField">
-				Enter a URL from a news article<span class="asteriskField">*</span> </label> 
+				Enter a LINK from a news article<span class="asteriskField"></span> </label> 
 
 				<div class="col text-cente"></div>
 				<input type="url" name="u" class="urlinput form-control" maxlength="200" id="id_entryURL" required> </div> </div> 
@@ -67,26 +50,30 @@ input[type=submit] {
 </div>
 <br><br>
 </div> </form>
-<h3 style="text-align: center;">Results will load here</h3>
 
-<b>What is this thing?</b><br>
+
+<b>ABOUT THIS PROJECT</b><br>
 This artificial intelligence can predict whether a news article is fake or real based on the words used in the article.
+Some of the algorithms used are the Naive Bayes Family such as :<br><br>
+1.Bernoulli Naive Bayes<br>
+2.Multinomial Naive Bayes<br>
+3.Gaussian Naive Bayes classifier<br>
 
 <br><br>
 
-<b>How to use?</b><br>
+<b>HOW TO USE ?</b><br>
 Enter a URL in the box above, the bot will load the article, extract the visible text, and 
-use 4 different AI models to make a prediction of
+use  different Naive Bayes classifier models to make a prediction of
 whether the article is fake or real.
 This may take several seconds because the URL you enter has to be loaded and processed.
-You will get a probability distribution and a final ruling. <br><br>
-
-<b>Any article I want?</b><br> 
-The model has been trained only on a dataset that tried to cover vast topics and thus it's likely to
-produce credible results for any domain 
 <br><br>
 
-<b>If you have more questions, comments, and concerns</b>
+<b>TYPES OF ARTICLES?</b><br> 
+The model has been trained only on a dataset that tried to cover vast topics and thus it's likely to
+produce credible results for any domain.Any news article is acceptable. 
+<br><br>
+
+<b>If you have any more questions or comments</b>
 <a href="mailto:lewisker033@gmail.com">Email me here</a>
 
 <br><br>

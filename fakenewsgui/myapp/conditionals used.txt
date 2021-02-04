@@ -1,0 +1,59 @@
+if( svc_prediction==[4] or svc_prediction == [2]):
+        
+            svc1="THIS IS REAL NEWS "
+            print(svc1)
+
+elif( svc_prediction==[1] or svc_prediction == [3]):
+            svc2="THIS IS FAKE NEWS "
+            print(svc2)
+
+else:
+    pass
+
+if( log_prediction==[4] or log_prediction == [2]):
+            log1="THIS IS REAL NEWS "
+            print(log1)
+
+elif( log_prediction==[1] or log_prediction == [3]):
+            log2="THIS IS FAKE NEWS "
+            print(log2)
+
+
+if( mlp_prediction==[4] or mlp_prediction == [2]):
+            mlp1="THIS IS REAL NEWS "
+            print(mlp1)
+
+elif( mlp_prediction==[1] or bernoulli_prediction == [3]):
+        
+            mlp2="THIS IS FAKE NEWS "
+            print(mlp2)
+
+
+if( mnb_prediction==[4] or mnb_prediction == [2]):
+            mnb1="THIS IS REAL NEWS "
+            print(mnb1)
+
+
+elif( mnb_prediction==[1] or mnb_prediction == [3]):
+            mnb1="THIS IS FAKE NEWS "
+            print(mnb1)
+
+if( bernoulli_prediction==[4] or bernoulli_prediction == [2]):
+            bern1="THIS IS REAL NEWS "
+            print(bern1)
+
+
+elif( bernoulli_prediction==[1] or bernoulli_prediction == [3]):
+            bern2="THIS IS FAKE NEWS "
+            print(bern2)
+
+
+if( gnb_prediction==[4] or gnb_prediction == [2]):
+            gnb1="THIS IS REAL NEWS "
+            print(gnb1)
+
+
+elif( gnb_prediction==[1] or gnb_prediction == [3]):
+            gnb2="THIS IS FAKE NEWS "
+            print(gnb2)
+

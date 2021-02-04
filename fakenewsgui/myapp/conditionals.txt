@@ -1,0 +1,37 @@
+if( svc_prediction==[4] or svc_prediction == [2]):
+            print("THIS IS REAL NEWS ")
+
+        elif( svc_prediction==[1] or svc_prediction == [3]):
+                    print("THIS IS FAKE NEWS ")
+        else:
+            pass
+
+        if( log_prediction==[4] or log_prediction == [2]):
+            print("THIS IS REAL NEWS ")
+
+        elif( log_prediction==[1] or log_prediction == [3]):
+                    print("THIS IS FAKE NEWS ")
+        
+        
+        if( mlp_prediction==[4] or mlp_prediction == [2]):
+            print("THIS IS REAL NEWS ")
+
+        elif( mlp_prediction==[1] or bernoulli_prediction == [3]):
+                    print("THIS IS FAKE NEWS ")
+                
+        if( mnb_prediction==[4] or mnb_prediction == [2]):
+            print("THIS IS REAL NEWS ")
+
+        elif( mnb_prediction==[1] or mnb_prediction == [3]):
+                    print("THIS IS FAKE NEWS ")
+        if( bernoulli_prediction==[4] or bernoulli_prediction == [2]):
+            print("THIS IS REAL NEWS ")
+
+        elif( bernoulli_prediction==[1] or bernoulli_prediction == [3]):
+                    print("THIS IS FAKE NEWS ")
+        
+        if( gnb_prediction==[4] or gnb_prediction == [2]):
+            print("THIS IS REAL NEWS ")
+
+        elif( gnb_prediction==[1] or gnb_prediction == [3]):
+                    print("THIS IS FAKE NEWS ")

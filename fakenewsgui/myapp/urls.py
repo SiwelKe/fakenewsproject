@@ -1,6 +1,6 @@
 # coding: utf-8
 # -*- coding: utf-8 -*-
-
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 import os, sys, re, time
 #STEP 1-ALLOW DJANGO TO RUN FROM COMMAND LINE AND NOT BROWSER
 project_path="/home/lewis/Documents/FakeNewsProject/fakenewsgui"
@@ -12,8 +12,8 @@ os.chdir(project_path)
 from django.core.wsgi import get_wsgi_application
 application=get_wsgi_application()
 from django.contrib.gis.views import feed
-from django.urls import path, re_path
-from myapp.strainer import *
+from django.urls import path, re_path,include
+from myapp.scrapper import *
 from myapp.util import *
 from myapp.forms import *
 from myapp.views import *
@@ -24,6 +24,8 @@ app_name='myapp'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    #path('', include('base.urls')),
+    #path(r'^$', 'base', name='base'),
     #path('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp', myapp.urls),
     #path('urlForm',urlForm)
 ]

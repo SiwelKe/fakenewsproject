@@ -1,6 +1,6 @@
 # coding: utf-8
 # -*- coding: utf-8 -*-
-
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 #TO SAVE THE MODELS
 
 import pandas as pd
@@ -14,6 +14,7 @@ from sklearn.svm import SVC
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import BernoulliNB, ComplementNB, MultinomialNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 
@@ -74,7 +75,8 @@ def buildExampleRow(body_text, cDict):
         if(word in cDict.keys()):
             example_vector[cDict[word]-1] = 1
         else:
-            print("This word doesn't exist in the dict:" + word)
+            pass
+            #print("This word doesn't exist in the dict:" + word)
 
     return (example_vector)
 
@@ -96,8 +98,10 @@ def processExamples(qs_Examples, cDict):
             examplesMatrix = buildExampleRow(ex.body_text, cDict)
         else:
             examplesMatrix = np.vstack([examplesMatrix, buildExampleRow(ex.body_text, cDict)])
+        pass
         #print('.', end='', flush=True)
-        print(".")
+        #print(".")
+       
 
     return( (Y_vector, examplesMatrix))
 
@@ -119,18 +123,18 @@ X_train, X_test, y_train, y_test = train_test_split(examplesMatrix, Y_vector, te
 
 #a dictionary with our models
 chosen_models = {}
-chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/MLPC_model.sav'] = MLPClassifier(hidden_layer_sizes=(128,64,32,16,8), max_iter=2500)
-chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/svc_model.sav'] = SVC(gamma='scale', probability = True)
-chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/log_model.sav'] = LogisticRegression()
-#chosen_models['fakenewsgui/myapp/GaussianNB_model.sav'] = GaussianNB()
-chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/gaussian_model.sav'] = GaussianNB()
-
-
+#chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/MLPC_model.sav'] = MLPClassifier(hidden_layer_sizes=(128,64,32,16,8), max_iter=2500)
+#chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/svc_model.sav'] = SVC(gamma='scale', probability = True)
+#chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/log_model.sav'] = LogisticRegression()
+#chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/gaussian_model.sav'] = GaussianNB()
+#chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/multinomial_model.sav'] = MultinomialNB()
+chosen_models['/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/bernoulli_model.sav'] = BernoulliNB()
 #cycle through the chosen models, train them, and decide if we want to keep them
 for fname, model in chosen_models.items():
     print("Working on " + fname)
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
+    print("Accuracy score: " + str(accuracy_score(predictions, y_test)))
     print("Classification report: ")
     print(classification_report(predictions, y_test))
     print("***************")

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block extrahead %}
+	<title>Detection of fake news</title>
+	<meta property="og:title" content="Detection of fake news">
+	<meta property="twitter:title" content="Detection of fake news">
+	<meta property="og:image" content="https://www.unslanted.net/static/crowdnews/robobrain_md.png">
+	<meta property="twitter:image" content="https://www.unslanted.net/static/crowdnews/robobrain_md.png">
+
+	<meta property="og:description" content="New artificial intelligence can detect fake news with high accuracy. Give it a try!">
+	<meta property="twitter:description" content="New artificial intelligence can detect fake news with high accuracy. Give it a try!">
+	<meta name="description" content="Detection of fake news">
+	<meta name="keywords" content="artificial intelligence natural language processing news fake news detection">
+	<meta property="og:url" content="https://www.unslanted.net/newsbot/">
+	<meta property="twitter:url" content="https://www.unslanted.net/newsbot/">
+	<meta property="og:type" content="article">
+	<meta property="twitter:type" content="article">
+<link rel="canonical" href="https://www.unslanted.net/newsbot/" />
+<meta name="twitter:partner" content="unslanted.net">
+<meta name="twitter:card" content="summary">
+
+
+<style>
+input[type=url] {
+  border: 2px solid green;
+  border-radius: 4px;
+}
+input[type=submit] {
+  border: 2px solid green;
+  border-radius: 4px;
+}
+
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.2.0/css/bootstrap-slider.min.css" />
+{% endblock %}
+
+
+{% block content %}
+<div class="row row row-fluid">
+	<div class="wpb_column columns small-12 medium-12">
+		<div class="vc_column-inner  ">
+			<div class="wpb_wrapper">
+				<br/>
+
+<h2 style="text-align: center;"> DETECTING FAKE NEWS USING NAIVE BAYES CLASSIFIER</h2>
+
+<br/>
+
+<form  method="get" >
+<div class="col text-center">	
+ <div class="buttonHolder">
+	  <div id="div_id_entryURL" class="form-group">
+		   <label for="id_entryURL" class="col-form-label  requiredField">
+				Enter a URL from a news article<span class="asteriskField">*</span> </label> 
+
+				<div class="col text-cente"></div>
+				<input type="url" name="u" class="urlinput form-control" maxlength="200" id="id_entryURL" required> </div> </div> 
+				<input type="submit"
+					name="submit"
+					value="Analyze"
+    
+        class="btn btn-primary btn btn-primary"
+        id="submit-id-submit"
+    
+    
+	/>
+</div>
+<br><br>
+</div> </form>
+<h3 style="text-align: center;">Results will loaded here</h3>
+
+<b>What is this thing?</b><br>
+This artificial intelligence can predict whether a news article is fake or real based on the words used in the article.
+
+<br><br>
+
+<b>How to use?</b><br>
+Enter a URL in the box above, the bot will load the article, extract the visible text, and 
+use 4 different AI models to make a prediction of
+whether the article is fake or real.
+This may take several seconds because the URL you enter has to be loaded and processed.
+You will get a probability distribution and a final ruling. <br><br>
+
+<b>Any article I want?</b><br> 
+The model has been trained only on a dataset that tried to cover vast topics and thus it's likely to
+produce credible results for any domain 
+<br><br>
+
+<b>If you have more questions, comments, and concerns</b>
+<a href="mailto:lewisker033@gmail.com">Email me here</a>
+
+<br><br>
+
+<br><br><br>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

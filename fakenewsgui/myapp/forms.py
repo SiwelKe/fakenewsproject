@@ -1,6 +1,6 @@
 # this file isn't needed, I had to create it to get the crispy_tags form, then I modified that to use 
 # a GET request to make the final URL shareable
-
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, Field, Fieldset
@@ -19,7 +19,7 @@ os.chdir(project_path)
 from django.core.wsgi import get_wsgi_application
 application=get_wsgi_application()
 from django.contrib.gis.views import feed
-from myapp.strainer import *
+from myapp.scrapper import *
 from myapp.util import *
 from myapp.models import *
 from . import *

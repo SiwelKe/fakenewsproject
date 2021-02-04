@@ -1,7 +1,21 @@
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 from django.shortcuts import render
 import pandas as pd
 import numpy as np
 import pickle,os,sys,re,time
+import pandas as pd
+import numpy as np
+from sklearn.metrics import *
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+#from sklearn.neural_network.multilayer_perceptron import MLPClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
 
 
 
@@ -15,122 +29,126 @@ os.chdir(project_path)
 from django.core.wsgi import get_wsgi_application
 application=get_wsgi_application()
 from django.contrib.gis.views import feed
-from myapp.strainer import *
+from myapp.scrapper import *
 from myapp.util import *
 from myapp.forms import *
 from myapp.models import *
 from . import *
-
-
-
-
+from django.http import Http404
 
 # Create your views here.
 def index(request):
-    
     url = request.GET.get('u')
     if((url is not None) and (len(url) > 5)):
 
-        # 1. Load the model from disk
-        print("Setting up")
-        #svc_model = pickle.load(open('fakenewsproject/svc_model.sav', 'rb'))
-        #mlp_model = pickle.load(open('fakenewsproject/MLPC_model.sav', 'rb'))
-        #log_model = pickle.load(open('fakenewsproject/log_model.sav', 'rb'))
-
+        # 1. Load the models from saved location
+        print("STARTING")
+    
         log_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/log_model.sav', 'rb'))
         svc_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/svc_model.sav', 'rb'))
         mlp_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/MLPC_model.sav', 'rb'))
-        #gnb_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/gaussian_model.sav', 'rb'))
-        print("Models loaded successful.")
+        gnb_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/gaussian_model.sav', 'rb'))
+        mnb_model=  pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/multinomial_model.sav','rb'))
+        bernoulli_model = pickle.load(open('/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/bernoulli_model.sav', 'rb'))
+        
+        print("Models have been loaded successful.")
 
 
         cDict = loadCanonDict()
-        ss = SoupStrainer()
-        ss.init()
+        soup = SoupStrainer()
+        soup.init()
         print("Setup complete")
-        print("Analyzing URL: " + url)
+        print("Analyzing your link: " + url)
 
-        if(ss.loadAddress(url)):
-            articleX = buildExampleRow(ss.extractText, cDict)
+        if(soup.loadAddress(url)):
+            
+            siteArticle = buildExampleRow(soup.extractText, cDict)
         else:
-            print("Error on URL, exiting")
-            return render(request, 'urlFail.html', {'URL', url})
+            raise Http404("YOU ENTERED A URL HAVING WRONG FORMAT OR YOU ARE OFFLINE.PLEASE TRY AGAIN")
+            #return render(request, '404.html', {'URL', url})
 
-        articleX = articleX.reshape(1, -1)
+        siteArticle = siteArticle.reshape(1, -1)
 
         
         # 5. Send the X row to the model to produce a prediction
-        svc_prediction = svc_model.predict(articleX)
-        svc_probabilities = svc_model.predict_proba(articleX)
+        svc_prediction = svc_model.predict(siteArticle)
+        svc_prob = svc_model.predict_proba(siteArticle)
         
-        mlp_prediction = mlp_model.predict(articleX)
-        mlp_probabilities = mlp_model.predict_proba(articleX)
+
+        mlp_prediction = mlp_model.predict(siteArticle)
+        mlp_prob = mlp_model.predict_proba(siteArticle)
         
-        log_prediction = log_model.predict(articleX)
-        log_probabilities = log_model.predict_proba(articleX)
 
-        #gnb_prediction = gnb_model.predict(articleX)
-        #gnb_probabilities = gnb_model.predict_proba(articleX)
-
-        # The classifications produced as predictions, espcially by the SVC, are sometimes different
-        # than the highest probability. So, we'll calculate fake + dodgy and seems legit + true to come up 
-        # with a ruling of yes or no, is it real or fake. Then we'll give the probabilties to allow
-        # the user to make up their mind.
-
-        #Total Fake = Fake (class 0) probability + Dodgy (class 1) probability
-
-        #Total Real = Seems Legit (class 3) probability + True (class 3) probability
-
-        svc_prb = (svc_probabilities[0][0]*100, svc_probabilities[0][1]*100, svc_probabilities[0][2]*100, svc_probabilities[0][3]*100)
-        svc_totFake = (svc_probabilities[0][0]*100) + (svc_probabilities[0][1]*100)
-        svc_totReal = (svc_probabilities[0][2]*100) + (svc_probabilities[0][3]*100)
-
-        mlp_prb = (mlp_probabilities[0][0]*100, mlp_probabilities[0][1]*100, mlp_probabilities[0][2]*100, mlp_probabilities[0][3]*100)
-        mlp_totFake = (mlp_probabilities[0][0]*100) + (mlp_probabilities[0][1]*100)
-        mlp_totReal = (mlp_probabilities[0][2]*100) + (mlp_probabilities[0][3]*100)
-
-        log_prb = (log_probabilities[0][0]*100, log_probabilities[0][1]*100, log_probabilities[0][2]*100, log_probabilities[0][3]*100)
-        log_totFake = (log_probabilities[0][0]*100) + (log_probabilities[0][1]*100)
-        log_totReal = (log_probabilities[0][2]*100) + (log_probabilities[0][3]*100)
-
-        #gnb_prb = (gnb_probabilities[0][0]*100, gnb_probabilities[0][1]*100, gnb_probabilities[0][2]*100, gnb_probabilities[0][3]*100)
-        #gnb_totFake = (gnb_probabilities[0][0]*100) + (gnb_probabilities[0][1]*100)
-        #gnb_totReal = (gnb_probabilities[0][2]*100) + (gnb_probabilities[0][3]*100)
+        log_prediction = log_model.predict(siteArticle)
+        log_prob = log_model.predict_proba(siteArticle)
 
 
-        #TOTAL PROBABILITY
-        fin_prb = ( (((svc_probabilities[0][0]*100)+(mlp_probabilities[0][0]*100)+(log_probabilities[0][0]*100))/3), 
-                    (((svc_probabilities[0][1]*100)+(mlp_probabilities[0][1]*100)+(log_probabilities[0][1]*100))/3),
-                    (((svc_probabilities[0][2]*100)+(mlp_probabilities[0][2]*100)+(log_probabilities[0][2]*100))/3),
-                    (((svc_probabilities[0][3]*100)+(mlp_probabilities[0][3]*100)+(log_probabilities[0][3]*100))/3) )
+        gnb_prediction = gnb_model.predict(siteArticle)
+        gnb_prob = gnb_model.predict_proba(siteArticle)
+
+        mnb_prediction = mnb_model.predict(siteArticle)
+        mnb_probabilities = mnb_model.predict_proba(siteArticle)
+
+        bernoulli_prediction = bernoulli_model.predict(siteArticle)
+        bernoulli_probabilities = bernoulli_model.predict_proba(siteArticle)
+
+        countlog=0
+        countsvc=0
+        countbern=0
+        countmlp=0
+        countmnb=0
+        countgnb=0
+
+        if( log_prediction==[4] or log_prediction == [2]):
+            countlog+=1
+            print(countlog)
+
+        if( svc_prediction==[4] or svc_prediction == [2]):
+            countsvc+=1
+            print(countsvc)
+
+        if( mlp_prediction==[4] or mlp_prediction == [2]):
+            countmlp+=1
+            print(countmlp)
+
+        if( bernoulli_prediction==[4] or bernoulli_prediction == [2]):
+            countbern+=1
+            print(countbern)
+
+
+        if( mnb_prediction==[4] or mnb_prediction == [2]):
+            countmnb+=1
+            print(countmnb)
+
+        if( gnb_prediction==[4] or gnb_prediction == [2]):
+            countgnb+=1
+            print(countgnb)
+
+
+        counttot=countlog+countmlp+countsvc+countgnb+countmnb+countbern
         
-        fin_totFake = (svc_totFake + mlp_totFake + log_totFake)/3
-        fin_totReal = (svc_totReal + mlp_totReal + log_totReal)/3
+        if (counttot >= 3):
+            print("THIS IS REAL NEWS ")
+            print("The count is:", counttot)
 
-        #fin_totFake = (gnb_totFake)
-        #fin_totReal = (gnb_totReal )
+        elif (counttot < 3):
+            print("The count is:", counttot)
+            print("THIS IS FAKE NEWS")
+        
+        
+
 
         # 6. Display the processed text and the results
         
-        context = {'headline':ss.recHeadline, 'words': ss.extractText, 'url' : url,
-                   'svc_totFake': svc_totFake, 
-                   'svc_totReal': svc_totReal, 
-                   'svc_prediction': svc_prediction, 
-                   'svc_probabilities': svc_prb, 
-                   'mlp_totFake': mlp_totFake, 
-                   'mlp_totReal': mlp_totReal, 
-                   'mlp_prediction': mlp_prediction, 
-                   'mlp_probabilities': mlp_prb,
-                   'log_totFake': log_totFake, 
-                   'log_totReal': log_totReal, 
-                   'log_prediction': log_prediction, 
-                   'log_probabilities': log_prb,
-                   'fin_totFake': fin_totFake, 
-                   'fin_totReal': fin_totReal, 
-                   'fin_probabilities': fin_prb
+        context = {'headline':soup.recHeadline, 'words': soup.extractText, 'url' : url,
+                   'counttot': counttot,
+                   
                    }
 
         return render(request, '/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/templates/results.html', context)
     else:
         #user to add a url
         return render(request, '/home/lewis/Documents/FakeNewsProject/fakenewsgui/myapp/templates/urlForm.html')
+
+
+

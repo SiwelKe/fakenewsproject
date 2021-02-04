@@ -1,6 +1,6 @@
 # coding: utf-8
 # -*- coding: utf-8 -*-
-
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 #ACTUAL MODEL TRAINING
 
 # at this point, we have all of our examples hosted in the ArticleExample table and we have all of the words
@@ -29,7 +29,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import GaussianNB,MultinomialNB,BernoulliNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 
@@ -159,48 +159,34 @@ X_train, X_test, y_train, y_test = train_test_split(examplesMatrix, Y_vector, te
 print("Training...")
 
 # SOME MORE MODELS TO TEST ACCURACY
-#model = MLPClassifier(hidden_layer_sizes=(128,64,32,16,8), max_iter=2500)
+#model = MLPClassifier()
 #model = SVC(gamma='scale', probability = True)
-#model = KNeighborsClassifier()
-#model = DecisionTreeClassifier()
-
-#PROJECT MODEL
-model = GaussianNB()
-
-
 #model = LogisticRegression()
+
+#BAIYESSIAN MODELS
+#model = GaussianNB()
+#model=MultinomialNB()
+model=BernoulliNB(binarize=0.0)
+
+
+
 model.fit(X_train, y_train) 
 predictions = model.predict(X_test)
 
-#These are just good sanity tests to see if your model is seeing some reasonable values and producing reasonable values
-
-print("Max/min of predictions: ")
-ymax = max(predictions)
-ymin = min(predictions)
-print(str(ymax)+ "/" + str(ymin))
-
-print("Max/Min of Y_test")
-ymax = max(y_test)
-ymin = min(y_test)
-print(str(ymax)+ "/" + str(ymin))
-
-print("Max/Min of Y_train")
-ymax = max(y_train)
-ymin = min(y_train)
-print(str(ymax)+ "/" + str(ymin))
-
-
 #Evaluation
-print("Statistical tests...")
+print("\n")
+
 print("############")
+print("\n")
 print("Accuracy score: " + str(accuracy_score(predictions, y_test)))
 print("Confusion Matrix: ")
 print(confusion_matrix(predictions, y_test))
 print("Classification report: ")
 print(classification_report(predictions, y_test))
+print("\n")
 print("############")
 
-
+"""
 print("Regression based: ")
 rSq = r2_score(y_test, predictions)*100
 expVariance = explained_variance_score(y_test, predictions)*100
@@ -211,7 +197,7 @@ print("R^2: ", "{:.2f} %".format(rSq))
 print("Explained variance: " + str(expVariance))
 print("Max Error: " + str(maxErr))
 print("Mean absolute Error: " + str(mae))
-
+"""
 
 
 exit(0)

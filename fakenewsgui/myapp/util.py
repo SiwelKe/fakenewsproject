@@ -4,7 +4,7 @@
 
 #from fakenewsgui.myapp.models import *
 #from fakenewsgui.myapp import *
-
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 from . import *
 import numpy as np
 from myapp.models import *
@@ -58,6 +58,5 @@ def processExamples(qs_Examples, cDict):
         else:
             examplesMatrix = np.vstack([examplesMatrix, buildExampleRow(ex.body_text, cDict)])
         print('.', end='', flush=True)
-        #print("." ,end='')
-
+        
     return( (Y_vector, examplesMatrix))

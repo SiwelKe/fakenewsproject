@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 from django.db import models
 
-
+# pyright: reportMissingImports=false, reportUnusedVariable=false, reportUntypedBaseClass=error,reportUndefinedVariable=false
 #from django.db import models
 
 
