@@ -7,7 +7,6 @@ attrs<=19.3.0
 backcall<=0.1.0
 beautifulsoup4<=4.9.3
 blinker<=1.4
-Brlapi<=0.6.6
 bs4<=0.0.1
 certifi<=2020.11.8
 cffi<=1.14.3
