@@ -186,18 +186,5 @@ print(classification_report(predictions, y_test))
 print("\n")
 print("############")
 
-"""
-print("Regression based: ")
-rSq = r2_score(y_test, predictions)*100
-expVariance = explained_variance_score(y_test, predictions)*100
-maxErr = max_error(y_test, predictions)
-mae = (mean_absolute_error(y_test, predictions))*100
-print("R^2: " + str(rSq))
-print("R^2: ", "{:.2f} %".format(rSq))
-print("Explained variance: " + str(expVariance))
-print("Max Error: " + str(maxErr))
-print("Mean absolute Error: " + str(mae))
-"""
-
 
 exit(0)
