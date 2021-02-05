@@ -1,5 +1,15 @@
 # fakenewsproject
 
-Here's a youtube video showing how this works:
+systemctl start mysql
 
- https://youtu.be/Z6Hn-qQcuEw
+python3 manage.py runserver
+
+
+
+![Homepage](http://i.imgur.com/pQlLA9Z.png)
+
+
+
+![Here's a youtube video showing how this works:](https://gifs.com/gif/detecting-fake-news-using-naive-bayes-classifiers-ANBZJz)
+ 
+ 
