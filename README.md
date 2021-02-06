@@ -10,6 +10,6 @@ python3 manage.py runserver
 
 
 
-![Here's a youtube video showing how this works:](https://gifs.com/gif/detecting-fake-news-using-naive-bayes-classifiers-ANBZJz)
+![Here's a youtube video showing how this works:](https://www.youtube.com/watch?v=Z6Hn-qQcuEw)
  
  
