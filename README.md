@@ -1,8 +1,15 @@
 # fakenewsproject
 
+A web system that enables one to detect whether a news article is fake news or real using  Naive Baiyes Classifiers
+
 systemctl start mysql
 
 python3 manage.py runserver
+
+to run from terminal run
+
+python3 classify_news.py
+
 
 
 
