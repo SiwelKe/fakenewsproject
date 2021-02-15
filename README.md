@@ -17,6 +17,7 @@ python3 classify_news.py
 
 
 
-![Here's a youtube video showing how this works:](https://www.youtube.com/watch?v=Z6Hn-qQcuEw)
+Here's a video of how it works
+https://www.youtube.com/watch?v=Z6Hn-qQcuEw
  
  
